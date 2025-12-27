@@ -1,5 +1,10 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'rust:1.76'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     stages {
         stage('Build') {
@@ -11,12 +16,6 @@ pipeline {
         stage('Test') {
             steps {
                 sh 'cargo test'
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t rust-ci-demo:latest .'
             }
         }
     }
